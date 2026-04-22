@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Candidate Signup</h2>
+
+  <input id="name" placeholder="Full Name">
+  <input id="passport" placeholder="Passport">
+  <input id="age" placeholder="Age">
+  <input id="experience" placeholder="Experience (years)">
+  <input id="skills" placeholder="Skills (comma separated)">
+  <input id="education" placeholder="Education">
+  <input id="certifications" placeholder="Certifications (comma separated)">
+  <input id="gender" placeholder="Gender">
+  
+  <button onclick="signup()">Submit</button>
+
+<script>
+async function signup() {
+  await fetch("http://localhost:3000/api/applications", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      full_name: document.getElementById("name").value,
+      passport_number: document.getElementById("passport").value,
+      created_by: "candidate"
+    })
+  });
+
+  alert("Submitted");
+}
+</script>
+</body>
+</html>

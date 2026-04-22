@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MENESAH</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { margin:0; font-family: Arial; background:#f4f6f9; }
+
+    .topbar {
+      background:#1e2a38;
+      color:white;
+      padding:15px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .container { display:flex; }
+
+    #sidebar {
+      width:200px;
+      background:#2c3e50;
+      color:white;
+      height:100vh;
+      padding:10px;
+      transition:0.3s;
+    }
+
+    #sidebar button {
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      background:#34495e;
+      color:white;
+      cursor:pointer;
+    }
+
+    #sidebar button:hover { background:#1abc9c; }
+
+    .content { flex:1; padding:20px; }
+
+    .card {
+      background:white;
+      padding:15px;
+      margin-bottom:15px;
+      border-radius:5px;
+    }
+
+    table {
+      width:100%;
+      border-collapse: collapse;
+    }
+
+    table th, table td {
+      padding:10px;
+      border-bottom:1px solid #ddd;
+    }
+
+    .hidden { display:none; }
+
+    #loginBox {
+      width:300px;
+      margin:100px auto;
+      background:white;
+      padding:20px;
+      text-align:center;
+      border-radius:6px;
+    }
+
+    #loginBox input {
+      width:90%;
+      margin:5px;
+      padding:8px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2>MENESAH</h2>
+  <input id="email" placeholder="Email"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div><b>MENESAH ERP</b></div>
+
+    <div>
+      Logged in as: <span id="userRole"></span>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+      <button onclick="showDashboard()">Dashboard</button>
+      <button onclick="showApplicantList()">Applicant List</button>
+      <button onclick="showCandidates()">Candidates</button>
+      <button onclick="showSelected()">Selected</button>
+      <button onclick="loadUnderProcess()">Under Process</button>
+      <button onclick="toggleMenu()">☰ Collapse</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="dashboard"></div>
+
+      <!-- APPLICANT LIST -->
+      <div id="applicantList" class="hidden">
+        <div class="card">
+          <h3>Applicant List</h3>
+
+          <!-- 🔥 NEW APPLICANT BUTTON -->
+          <button onclick="showCandidates()">+ New Applicant</button>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Passport</th>
+                <th>Age</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CANDIDATES -->
+      <div id="candidates" class="hidden">
+
+        <div class="card">
+          <h3>Candidate Management</h3>
+
+          <!-- 🔥 ADD BUTTON -->
+          <button id="addCandidateBtn" onclick="showCandidateForm()">
+            + Add Candidate
+          </button>
+
+          <!-- FORM -->
+          <div id="candidateForm" class="hidden">
+            <input id="c_name" placeholder="Full Name"><br>
+            <input id="c_passport" placeholder="Passport Number"><br>
+            <input id="c_age" placeholder="Age"><br><br>
+
+            <label>Passport Upload</label><br>
+            <input type="file" id="passport_file"><br><br>
+
+            <button onclick="createCandidate()">Submit</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROFILE -->
+      <div id="profile" class="hidden">
+
+        <button onclick="showApplicantList()">⬅ Back</button>
+
+        <div class="card">
+          <h2 id="profileName"></h2>
+          <div id="profileInfo"></div>
+        </div>
+
+        <div class="card">
+          <h3>Upload File</h3>
+          <input type="file" id="file">
+          <button onclick="uploadFile()">Upload</button>
+        </div>
+
+        <div class="card">
+          <h3>Files</h3>
+          <div id="files"></div>
+        </div>
+
+        <div class="card">
+          <h3>Timeline</h3>
+          <div id="timeline"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
