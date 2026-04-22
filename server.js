@@ -122,7 +122,7 @@ app.get("/report/:id", (req, res) => {
 
   doc.end();
 });
-const PORT = process.env.PORT || 3000;
+
 // START SERVER
 const PORT = process.env.PORT || 3000;
 
