@@ -51,7 +51,9 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: process.env.DATABASE_URL.includes("render.com")
+  ? { rejectUnauthorized: false }
+  : false
 });
 async function initDB() {
   try {
@@ -93,7 +95,7 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-
+    
     // ✅ INSERT DEFAULT USER (if not exists)
     await pool.query(`
       INSERT INTO users (email, password, role)
@@ -107,7 +109,6 @@ async function initDB() {
     console.error("DB INIT ERROR:", err);
   }
 }
-
 // PDF REPORT
 const PDFDocument = require("pdfkit");
 

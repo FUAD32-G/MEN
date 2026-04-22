@@ -19,10 +19,9 @@ async function login() {
 
   const data = await res.json();
 
-  if (!data.token) return alert("Login failed");
-
+if (!data.token) return alert("Login failed");
   token = data.token;
-  role = data.user.role;
+  role = data.role;
 
   document.getElementById("loginBox").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
