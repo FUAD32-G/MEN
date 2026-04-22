@@ -43,40 +43,15 @@ app.post("/upload/:id", upload.single("file"), async (req, res) => {
   await pool.query(
     "INSERT INTO notifications (message) VALUES ($1)",
     [`Application ${id} moved to ${status}`]
- const { Pool } = require("pg");
+    
+  );
+  res.send("File uploaded");
+});
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
-});
-  );
-  res.send("File uploaded");
-});
-
-// PDF REPORT
-const PDFDocument = require("pdfkit");
-
-app.get("/report/:id", (req, res) => {
-  const doc = new PDFDocument();
-
-  res.setHeader("Content-Type", "application/pdf");
-  doc.pipe(res);
-
-  doc.text("MENESAH REPORT");
-  doc.text("Application ID: " + req.params.id);
-
-  doc.end();
-});
-const PORT = process.env.PORT || 3000;
-// START SERVER
-app.listen(PORT, () => {
-const PORT = process.env.PORT || 3000;
-
-initDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-});
 });
 async function initDB() {
   try {
@@ -132,3 +107,27 @@ async function initDB() {
     console.error("DB INIT ERROR:", err);
   }
 }
+
+// PDF REPORT
+const PDFDocument = require("pdfkit");
+
+app.get("/report/:id", (req, res) => {
+  const doc = new PDFDocument();
+
+  res.setHeader("Content-Type", "application/pdf");
+  doc.pipe(res);
+
+  doc.text("MENESAH REPORT");
+  doc.text("Application ID: " + req.params.id);
+
+  doc.end();
+});
+const PORT = process.env.PORT || 3000;
+// START SERVER
+const PORT = process.env.PORT || 3000;
+
+initDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});
