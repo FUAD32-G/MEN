@@ -2,10 +2,11 @@
 let token = "";
 let role = "";
 let currentId = null;
+const BASE_URL = "https://menesah-api.onrender.com";
 
 // ================= LOGIN =================
 async function login() {
-  const res = await fetch("http://localhost:3000/api/auth/login", {
+  const res = await fetch(`${BASE_URL}/api/auth/login`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
@@ -66,7 +67,7 @@ async function showDashboard() {
     </div>
   `;
 
-  const res = await fetch("http://localhost:3000/api/applications", {
+  const res = await fetch(`${BASE_URL}/api/applications`, {
     headers: { Authorization: "Bearer " + token }
   });
 
@@ -107,7 +108,7 @@ async function showApplicantList() {
   hideAll();
   document.getElementById("applicantList").classList.remove("hidden");
 
-  const res = await fetch("http://localhost:3000/api/applications", {
+  const res = await fetch(`${BASE_URL}/api/applications`, {
     headers: { Authorization: "Bearer " + token }
   });
 
@@ -156,7 +157,7 @@ async function loadUnderProcess() {
   hideAll();
   document.getElementById("dashboard").classList.remove("hidden");
 
-  const res = await fetch("http://localhost:3000/api/applications", {
+  const res = await fetch(`${BASE_URL}/api/applications`, {
     headers: { Authorization: "Bearer " + token }
   });
 
@@ -196,7 +197,7 @@ async function processApp(id) {
   else if (role === "owner") next = "Completed";
   else return alert("Not allowed");
 
-  await fetch(`http://localhost:3000/api/applications/${id}`, {
+  await fetch(`${BASE_URL}/api/applications/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -219,7 +220,7 @@ async function viewDetails(id) {
   hideAll();
   document.getElementById("profile").classList.remove("hidden");
 
-  const res = await fetch(`http://localhost:3000/api/applications/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/applications/${id}`, {
     headers: { Authorization: "Bearer " + token }
   });
 
@@ -239,7 +240,7 @@ async function viewDetails(id) {
 // ================= TIMELINE =================
 async function loadTimeline(id) {
   const res = await fetch(
-    `http://localhost:3000/api/applications/timeline/${id}`,
+    `${BASE_URL}/api/applications/timeline/${id}`,
     { headers: { Authorization: "Bearer " + token } }
   );
 
@@ -278,7 +279,7 @@ async function uploadFile() {
 // ================= FILES =================
 async function loadFiles(id) {
   const res = await fetch(
-    `http://localhost:3000/api/applications/files/${id}`,
+    `${BASE_URL}/api/applications/files/${id}`,
     { headers: { Authorization: "Bearer " + token } }
   );
 
@@ -320,7 +321,7 @@ async function createCandidate() {
   const name = document.getElementById("c_name").value;
   const passport = document.getElementById("c_passport").value;
 
-  const res = await fetch("http://localhost:3000/api/applications", {
+  const res = await fetch(`${BASE_URL}/api/applications`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -353,7 +354,7 @@ async function showSelected() {
   hideAll();
   document.getElementById("dashboard").classList.remove("hidden");
 
-  const res = await fetch("http://localhost:3000/api/applications", {
+  const res = await fetch(`${BASE_URL}/api/applications`, {
     headers: { Authorization: "Bearer " + token }
   });
 
@@ -375,7 +376,7 @@ async function loadPartnerDashboard() {
   hideAll();
   document.getElementById("dashboard").classList.remove("hidden");
 
-  const res = await fetch("http://localhost:3000/api/applications", {
+  const res = await fetch(`${BASE_URL}/api/applications`, {
     headers: { Authorization: "Bearer " + token }
   });
 
