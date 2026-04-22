@@ -3,6 +3,8 @@ let token = "";
 let role = "";
 let currentId = null;
 const BASE_URL = "https://menesah-api.onrender.com";
+fetch(`${BASE_URL}/api/auth/login`)
+fetch(`${BASE_URL}/api/applications`)
 
 // ================= LOGIN =================
 async function login() {
@@ -268,7 +270,7 @@ async function uploadFile() {
   const formData = new FormData();
   formData.append("file", file);
 
-  await fetch(`http://localhost:3000/upload/${currentId}`, {
+  await fetch(`${BASE_URL}/api/applications/upload/${currentId}`, {
     method: "POST",
     body: formData
   });
@@ -289,7 +291,7 @@ async function loadFiles(id) {
 
   data.forEach(f => {
     html += `
-      <a href="http://localhost:3000/uploads/${f.filepath}" target="_blank">
+      <a href="${BASE_URL}/uploads/${f.filepath}" target="_blank">
         ${f.filename}
       </a><br>
     `;
@@ -341,7 +343,7 @@ async function createCandidate() {
   const formData = new FormData();
   formData.append("file", document.getElementById("passport_file").files[0]);
 
-  await fetch(`http://localhost:3000/upload/${id}`, {
+  await fetch(`${BASE_URL}/api/applications/upload/${id}`, {
     method: "POST",
     body: formData
   });

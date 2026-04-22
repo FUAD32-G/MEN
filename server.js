@@ -18,8 +18,8 @@ app.use(express.static(path.join(__dirname, "frontend")));
 const authRoutes = require("./routes/auth");
 const appRoutes = require("./routes/applications");
 
-app.use("/api/auth", authRoutes);
-app.use("/api/applications", appRoutes);
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/applications", require("./routes/applications"));
 
 // FILE UPLOAD (multer)
 const multer = require("multer");
