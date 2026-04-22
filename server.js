@@ -1,12 +1,18 @@
+// ===== IMPORTS =====
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const path = require("path");
 
-app.use(cors());
+// ===== INIT APP (MUST COME BEFORE app.use) =====
 const app = express();
 
+// ===== MIDDLEWARE =====
 app.use(cors());
 app.use(express.json());
+
+// ===== STATIC FILES =====
+app.use(express.static(path.join(__dirname, "frontend")));
 
 // ROUTES
 const authRoutes = require("./routes/auth");
@@ -40,8 +46,7 @@ app.post("/upload/:id", upload.single("file"), async (req, res) => {
   );
   res.send("File uploaded");
 });
-const path = require("path");
-app.use(express.static(path.join(__dirname, "frontend")));
+
 // PDF REPORT
 const PDFDocument = require("pdfkit");
 
