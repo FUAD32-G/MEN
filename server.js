@@ -43,6 +43,12 @@ app.post("/upload/:id", upload.single("file"), async (req, res) => {
   await pool.query(
     "INSERT INTO notifications (message) VALUES ($1)",
     [`Application ${id} moved to ${status}`]
+ const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
   );
   res.send("File uploaded");
 });
@@ -64,5 +70,65 @@ app.get("/report/:id", (req, res) => {
 const PORT = process.env.PORT || 3000;
 // START SERVER
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const PORT = process.env.PORT || 3000;
+
+initDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 });
+});
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        email TEXT,
+        password TEXT,
+        role TEXT
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS applications (
+        id SERIAL PRIMARY KEY,
+        full_name TEXT,
+        passport_number TEXT,
+        age INT,
+        status TEXT DEFAULT 'Applied',
+        created_by TEXT,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS files (
+        id SERIAL PRIMARY KEY,
+        application_id INT,
+        filename TEXT,
+        filepath TEXT
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS timeline (
+        id SERIAL PRIMARY KEY,
+        application_id INT,
+        action TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    // ✅ INSERT DEFAULT USER (if not exists)
+    await pool.query(`
+      INSERT INTO users (email, password, role)
+      VALUES ('owner@test.com', '1234', 'owner')
+      ON CONFLICT DO NOTHING;
+    `);
+
+    console.log("Database initialized ✅");
+
+  } catch (err) {
+    console.error("DB INIT ERROR:", err);
+  }
+}
