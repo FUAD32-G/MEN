@@ -100,6 +100,11 @@ async function initDB() {
     await pool.query(`
       INSERT INTO users (email, password, role)
       VALUES ('owner@test.com', '1234', 'owner')
+      VALUES ('receptionsit@test.com', '1234', 'receptionist')
+      VALUES ('it@test.com', '1234', 'it')
+      VALUES ('partner@test.com', '1234', 'partner')
+      VALUES ('secretary@test.com', '1234', 'secretary')
+
       ON CONFLICT DO NOTHING;
     `);
 
