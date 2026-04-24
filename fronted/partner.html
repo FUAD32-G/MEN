@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Partner Portal</title>
+</head>
+<body>
+
+<h2>Partner Dashboard</h2>
+
+<div id="list"></div>
+
+<script>
+const BASE_URL = "http://localhost:3000";
+
+let token = "";
+
+// LOGIN QUICK (for now)
+async function login() {
+  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      email: "partner@test.com",
+      password: "1234"
+    })
+  });
+
+  const data = await res.json();
+  token = data.token;
+
+  load();
+}
+
+async function load() {
+  const res = await fetch(`${BASE_URL}/api/applications`, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const data = await res.json();
+
+  let html = "<h3>Candidates Ready</h3>";
+
+  data.forEach(a => {
+    html += `
+      <p>
+        ${a.full_name} - ${a.passport_number}
+        <button onclick="select(${a.id})">Select</button>
+      </p>
+    `;
+  });
+
+  document.getElementById("list").innerHTML = html;
+}
+
+async function select(id) {
+  await fetch(`${BASE_URL}/api/applications/${id}`, {
+    method:"PUT",
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:"Bearer " + token
+    },
+    body: JSON.stringify({ status:"Selected" })
+  });
+
+  load();
+}
+
+login();
+</script>
+
+</body>
+</html>

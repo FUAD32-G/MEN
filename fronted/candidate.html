@@ -1,33 +1,51 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Candidate Portal</title>
+</head>
 <body>
-  <h2>Candidate Signup</h2>
 
-  <input id="name" placeholder="Full Name">
-  <input id="passport" placeholder="Passport">
-  <input id="age" placeholder="Age">
-  <input id="experience" placeholder="Experience (years)">
-  <input id="skills" placeholder="Skills (comma separated)">
-  <input id="education" placeholder="Education">
-  <input id="certifications" placeholder="Certifications (comma separated)">
-  <input id="gender" placeholder="Gender">
-  
-  <button onclick="signup()">Submit</button>
+<h2>Candidate Registration</h2>
+
+<input id="name" placeholder="Full Name"><br><br>
+<input id="passport" placeholder="Passport"><br><br>
+<input id="age" placeholder="Age"><br><br>
+
+<input type="file" id="file"><br><br>
+
+<button onclick="apply()">Submit Application</button>
 
 <script>
-async function signup() {
-  await fetch("http://localhost:3000/api/applications", {
+const BASE_URL = "http://localhost:3000";
+
+async function apply() {
+  const full_name = document.getElementById("name").value;
+  const passport_number = document.getElementById("passport").value;
+  const age = document.getElementById("age").value;
+
+  // Create application
+  const res = await fetch(`${BASE_URL}/api/applications`, {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      full_name: document.getElementById("name").value,
-      passport_number: document.getElementById("passport").value,
-      created_by: "candidate"
-    })
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify({ full_name, passport_number, age })
   });
 
-  alert("Submitted");
+  const app = await res.json();
+
+  // Upload file
+  const file = document.getElementById("file").files[0];
+  const form = new FormData();
+  form.append("file", file);
+  form.append("application_id", app.id);
+
+  await fetch(`${BASE_URL}/api/files`, {
+    method: "POST",
+    body: form
+  });
+
+  alert("Application submitted!");
 }
 </script>
+
 </body>
 </html>

@@ -1,15 +1,10 @@
 const express = require("express");
-const router = express.Router();
-const { Pool } = require("pg");
+const jwt = require("jsonwebtoken");
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+module.exports = (pool) => {
+  const router = express.Router();
 
-// LOGIN
-router.post("/login", async (req, res) => {
-  try {
+  router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     const result = await pool.query(
@@ -23,15 +18,14 @@ router.post("/login", async (req, res) => {
 
     const user = result.rows[0];
 
-    res.json({
-      token: "testtoken",
-      role: user.role
-    });
+    const token = jwt.sign(
+      { role: user.role, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-  } catch (err) {
-    console.error("LOGIN ERROR:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+    res.json({ token, role: user.role });
+  });
 
-module.exports = router;
+  return router;
+};
